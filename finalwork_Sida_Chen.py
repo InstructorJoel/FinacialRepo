@@ -10,6 +10,8 @@ def tokenize(df):
     return df
 def liner_regression(df):
     import statsmodels.api as sm
-    target =
+    target1 = df[]
 
 if __name__ == '__main__':
+    read_data(Yelp_business.csv)
+
