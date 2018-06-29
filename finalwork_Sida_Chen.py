@@ -1,4 +1,4 @@
-import panda as pd
+import pandas as pd
 import numpy as np
 
 
@@ -9,41 +9,55 @@ def read_data(csv_file):
 
 
 def tokenize(df):
+    # count numbers and store in df
+    df = df.assign(world_count=0, number_count=0)
     df['world_count'] = df['test'].apply(lambda x: len(str(x).split(" ")))
     df['number_count'] = df['text'].apply(lambda x: len([x for x in x.split() if x.isdigit()]))
     return df
 
 
-def liner_regression(X, Y):
-    import matplotlib.pyplot as plt
+def liner_regression(attribute1, attribute2, df):
     from sklearn import linear_model
-    from sklearn.metrics import mean_squared_error, r2_score
     # Create linear regression object
     regr = linear_model.LinearRegression()
-
-    # Train the model using the training sets
+    X = df[attribute1]
+    Y = df[attribute2]
     regr.fit(X, Y)
-    # Make predictions using the testing set
-    Y_pred = regr.predict(X)
     # The coefficients
     print('Coefficients: \n', regr.coef_)
-    # The mean squared error
-    print("Mean squared error: %.2f"
-          % mean_squared_error(Y, Y_pred))
-    # Explained variance score: 1 is perfect prediction
-    print('Variance score: %.2f' % r2_score(Y, Y_pred))
-    plt.scatter(X, Y, color='black')
-    plt.plot(X, Y_pred, color='blue', linewidth=3)
-    plt.xticks(())
-    plt.yticks(())
-    plt.show()
+    return
+
+
+def visualization(attribute1, attribute2, df):
+    import seaborn as sns
+    sns.set(color_codes=True)
+    np.random.seed(sum(map(ord, "regression")))
+    sns.lmplot(x=attribute1, y=attribute2, data=df)
     return
 
 
 if __name__ == '__main__':
-    df_business = read_data('C:\Users\star\Desktop\yelp_business.csv')
+    # https://www.kaggle.com/yelp-dataset/yelp-dataset/home
     df_review = read_data('C:\Users\star\Desktop\yelp_review.csv')
-    tokenize(df_review)
+    df = tokenize(df_review)
+    liner_regression('world_count', 'stars',df)
+    visualization('world_count', 'stars',df)
+    liner_regression('world_count', 'useful', df)
+    visualization('world_count',  'useful', df)
+    liner_regression('world_count', 'funny', df)
+    visualization('world_count', 'funny', df)
+    liner_regression('world_count', 'cool', df)
+    visualization('world_count', 'cool', df)
+    liner_regression('number_count', 'stars', df)
+    visualization('number_count', 'stars', df)
+    liner_regression('number_count', 'useful', df)
+    visualization('number_count', 'useful', df)
+    liner_regression('number_count', 'funny', df)
+    visualization('number_count', 'funny', df)
+    liner_regression('number_count', 'cool', df)
+    visualization('number_count', 'cool', df)
+
+
 
 
 
