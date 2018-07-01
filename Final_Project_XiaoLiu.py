@@ -138,23 +138,9 @@ digging detailed news, they could further search the full text of the article.
 """
 
 from bs4 import BeautifulSoup
+from capstone_huidan_zhang import parse_html
 company=get_company()
 url= 'https://www.bloomberg.com/search?query='+company
-def parse_html(url):
-    """
-    This function performs the preparation steps in parsing an HTML page.
-    :param url: the URL of the page to be parsed
-    :return: the parsed HTML page, a bs4.beautifulsoup object
-    """
-    r = requests.get(url, timeout=5)  # get the HTML page with 5 seconds timeout
-
-    # check the HTTP status code and proceed accordingly
-    if r.status_code != 200:
-        return "The page is not working."  # the page is not correctly connected
-
-    else:
-        soup = BeautifulSoup(r.content, "html.parser")  # use "BeautifulSoup" to parse the html page
-        return soup  # return the parsed page
 variable=parse_html(url)
 variable2=variable.find_all('div',{'class':'search-result-story__container'})
 for i in variable2:
